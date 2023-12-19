@@ -12,14 +12,15 @@ const signupMid = [
   middleware.validate_email,
 ]
 
+//? Home =====================================================================================
 
 // Define routes for users
-router.get('/', (req, res) => {
+router.get('/',auth.loginRequired, (req, res) => {
   return res.render('index');
 });
 
 
-// login===================================================================================
+//? login===================================================================================
 router.get('/login', (req, res) => {
   return res.render('login');
 });
@@ -27,24 +28,23 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
   console.log(req.body);
-  var username = req.username ;
-  var password = req.password ;
-  try {
-    const result1 = await session.run(`MATCH (u:User{username:"${username}",password:"${password}}) RETURN u`);
-    var users1 = result1.records.map(record => record.get('u').properties);
-    if (users1.length!= 1){ return res.status(400).send('wrong username or password');}
+  var username = req.body.username ;
+  var password = req.body.password ;
+  if (password == null || username == null) return res.status(400).send('empty input');
+  console.log(`login =========\n ${username}, ${password}`)
+  auth.authenticate(username,password).then(user => {
+    if (user == null) return res.status(400).send('wrong username or password');
     else{
-      return res.render('index');
+      console.log("authentification success");
+      res.cookie('access-token', auth.generateAccessToken(user.username), { maxAge: 1800000, httpOnly: true });
+      return res.redirect('/');
     }
+  });
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
 });
 
 
-// signup ===================================================================================
+//? signup ===================================================================================
 router.get('/signup', (req, res) => {
   return res.render('signup');
 });
@@ -82,6 +82,7 @@ router.post('/signup',signupMid, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 module.exports = router;

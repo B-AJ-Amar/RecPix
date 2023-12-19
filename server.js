@@ -1,6 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
+// const session = require('express-session');
 const routes = require('./routes');
 
 //*config ============================================================================================================
@@ -19,11 +19,11 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
-app.use(session({
-    secret:"secret key",
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false // don't create session until something stored
-}));
+// app.use(session({
+//     secret:"secret key",
+//     resave: false, // don't save session if unmodified
+//     saveUninitialized: false // don't create session until something stored
+// }));
 
 
 app.use((req, res, next) => {

@@ -8,15 +8,15 @@ const jwtSecret = 'e0fb385c27f800fbb82fce3d7515c82e116277e25a95dc2a3d399162f220e
 // ? JWT AUTHENTICATION ==========================================================
 
 function generateAccessToken(username) {
-    return jwt.sign(username,jwtSecret, { expiresIn: '1800s' });
+    return jwt.sign({ username: username },jwtSecret, { expiresIn : '604800s' }); // expires in 7 days
 }
 
 function isAuthenticated(req, res, next) {
     // cookies based authentication
     const token = req.cookies['access-token'];
-    if (token == null) return res.sendStatus(401);
+    if (token == null) return next();
     jwt.verify(token, jwtSecret, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) next();
         req.user = user; // like request.user in django
         next();
     })
