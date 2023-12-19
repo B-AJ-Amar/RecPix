@@ -1,6 +1,9 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 // const session = require('express-session');
+var partials      = require('express-partials');
+const path = require('path');
+
 const routes = require('./routes');
 
 //*config ============================================================================================================
@@ -15,6 +18,8 @@ app.listen(port, () => {
 app.use('/static',express.static('public'));
 app.set('/media', express.static('media'));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(partials()); // use partials to fix include problem
 
 app.use(express.json());
 app.use(express.urlencoded());
