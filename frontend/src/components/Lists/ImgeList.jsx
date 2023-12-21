@@ -22,22 +22,22 @@ const data = [
     { "id":6,
       "img":"http://localhost:3000/static/images/img-6.jpg"
     },
-    { "id":1,
+    { "id":11,
       "img":"http://localhost:3000/static/images/img-1.jpg"
     },
-    { "id":2,
+    { "id":12,
       "img":"http://localhost:3000/static/images/img-2.jpg"
     },
-    { "id":3,
+    { "id":13,
       "img":"http://localhost:3000/static/images/img-3.jpg"
     },
-    { "id":4,
+    { "id":14,
       "img":"http://localhost:3000/static/images/img-4.jpg"
     },
-    { "id":5,
+    { "id":15,
       "img":"http://localhost:3000/static/images/img-5.jpg"
     },
-    { "id":6,
+    { "id":16,
       "img":"http://localhost:3000/static/images/img-6.jpg"
     },
 ]
