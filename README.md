@@ -1,9 +1,14 @@
 # RecPix
-RecPix is a web application developed using Express and Neo4j, aimed at providing users with a personalized and intelligent photo recommendation experience. 
+RecPix is a web application developed using Express ,React and Neo4j, aimed at providing users with a personalized and intelligent photo recommendation experience. 
 
 ⚠️ **Note: Under Development**
 
-RecPix is a project initiated to apply and enhance my knowledge of graph databases, particularly Neo4j, and to learn the ins and outs of web development using the Express.js framework.
+"RecPix is a project initiated to apply and enhance my knowledge of graph databases, particularly Neo4j. It serves as an opportunity to learn new technologies (Express.js and React) and further advance my skills in web development."
+
+## Technologies Used
+- React: A JavaScript library for building user interfaces.
+- Express: A minimal and flexible Node.js web application framework.
+- Neo4j: A graph database management system.
 
 ## Features
 
