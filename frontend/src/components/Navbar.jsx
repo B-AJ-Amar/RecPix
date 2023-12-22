@@ -1,8 +1,24 @@
-import React from 'react';
+import { 
+    React,
+    useState 
+} from 'react';
+
+
+
 
 export default function Navbar(){
+
+    let navItems = [
+        {name: "Home", link: "#"},
+        {name: "Explore", link: "#"},
+        {name: "Categories", link: "#"},
+        {name: "Profile", link: "#"}
+    ]
+    
+    const [selectedNavItem, setselectedNavItem] = useState('0');
+
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <nav className="navbar navbar-expand-lg  fixed-top">
         <div className="container-fluid">
             <a className="navbar-brand" href="#">
                 RecPix
@@ -13,18 +29,14 @@ export default function Navbar(){
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Home</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Explore</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Categories</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Profile</a>
-                    </li>
+                    {navItems.map((item, index) => {
+                        console.log(item,index);
+                        return (
+                            <li className="nav-item" key={index} onClick={() => setselectedNavItem(index)}>
+                                <a className={selectedNavItem === index ? "nav-link active" : "nav-link"} href="#">{item.name}</a>
+                            </li>
+                        )
+                    })}
                 </ul>
                 <form className="form-inline search-form">
                     <input className="form-control search-input" type="search" placeholder="Search" aria-label="Search" />
@@ -34,3 +46,4 @@ export default function Navbar(){
     </nav>
     )
 }
+
