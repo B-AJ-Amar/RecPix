@@ -16,40 +16,52 @@ const signupMid = [
 
 // Define routes for users
 router.get('/',auth.loginRequired, (req, res) => {
-  return res.render('index');
+  // return res.render('index');
+  // i will use fake data for now
+  return res.json({"data":[
+    { "id":1,
+      "img":"http://localhost:3000/static/images/img-1.jpg"
+    },
+    { "id":2,
+      "img":"http://localhost:3000/static/images/img-2.jpg"
+    },
+    { "id":3,
+      "img":"http://localhost:3000/static/images/img-3.jpg"
+    },
+    { "id":4,
+      "img":"http://localhost:3000/static/images/img-4.jpg"
+    },
+    { "id":5,
+      "img":"http://localhost:3000/static/images/img-5.jpg"
+    },
+    { "id":6,
+      "img":"http://localhost:3000/static/images/img-6.jpg"
+    },
+    { "id":11,
+      "img":"http://localhost:3000/static/images/img-1.jpg"
+    },
+    { "id":12,
+      "img":"http://localhost:3000/static/images/img-2.jpg"
+    },
+    { "id":13,
+      "img":"http://localhost:3000/static/images/img-3.jpg"
+    },
+    { "id":14,
+      "img":"http://localhost:3000/static/images/img-4.jpg"
+    },
+    { "id":15,
+      "img":"http://localhost:3000/static/images/img-5.jpg"
+    },
+    { "id":16,
+      "img":"http://localhost:3000/static/images/img-6.jpg"
+    },
+  ]});
 });
 
 
-//? login===================================================================================
-router.get('/login', (req, res) => {
-  return res.render('login');
-});
-
-
-router.post('/login', async (req, res) => {
-  console.log(req.body);
-  var username = req.body.username ;
-  var password = req.body.password ;
-  if (password == null || username == null) return res.status(400).send('empty input');
-  console.log(`login =========\n ${username}, ${password}`)
-  auth.authenticate(username,password).then(user => {
-    if (user == null) return res.status(400).send('wrong username or password');
-    else{
-      console.log("authentification success");
-      res.cookie('access-token', auth.generateAccessToken(user.username), { maxAge: 1800000, httpOnly: true });
-      return res.redirect('/');
-    }
-  });
-
-});
 
 
 //? signup ===================================================================================
-router.get('/signup', (req, res) => {
-  return res.render('signup');
-});
-
-
 
 // signup
 router.post('/signup',signupMid, async (req, res) => {
