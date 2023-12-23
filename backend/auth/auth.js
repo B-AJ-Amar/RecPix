@@ -7,10 +7,10 @@ const {jwtSecret,jwtAcssesTokenExpireTime,jwtRefreshTokenExpireTime} = require('
 // ? JWT AUTHENTICATION ==========================================================
 // $ generate tokens -----------------------------
 function generateAccessToken(user) {
-    return jwt.sign({ username: user.username,type:1 },jwtSecret, { expiresIn : jwtAcssesTokenExpireTime }); // expires in 30 min
+    return jwt.sign({ id:user.identity.toNumber(),username: user.properties.username,type:1 },jwtSecret, { expiresIn : jwtAcssesTokenExpireTime }); // expires in 30 min
 }
 function generateRefreshToken(user) {
-    return jwt.sign({ type:0,username:user.username },jwtSecret, { expiresIn : jwtRefreshTokenExpireTime }); // expires in 7 days
+    return jwt.sign({ id:user.identity.toNumber(),username:user.properties.username,type:0 },jwtSecret, { expiresIn : jwtRefreshTokenExpireTime }); // expires in 7 days
 }
 
 
@@ -50,8 +50,8 @@ function authenticate(username,password) {
     return session.run(query).then(result => {
         if (result.records.length == 0) return null;
         else{
-            console.log(result.records[0].get(0).properties);
-            return result.records[0].get(0).properties;  
+            console.log(result.records[0].get(0));
+            return result.records[0].get(0);  
         } 
     });  
 }
