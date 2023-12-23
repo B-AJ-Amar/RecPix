@@ -13,8 +13,8 @@ router.post('/login', async (req, res) => {
       if (user == null) return res.json({message : 'wrong username or password'}).status(400);
       else{
         console.log("authentification success");
-        let accessToken = auth.generateAccessToken(user.username);
-        let refreshToken = auth.generateRefreshToken(user.username);
+        let accessToken = auth.generateAccessToken(user);
+        let refreshToken = auth.generateRefreshToken(user);
         // TODO:refresh token
         return res.json({'access-token': accessToken,'refresh-token': refreshToken}).status(200);
       }
@@ -28,7 +28,6 @@ router.post('/refreshToken',auth.loginRequired, (req, res) => {
     let refreshToken = req.body['refresh-token'];
     console.log(refreshToken);
     let authToken = auth.generateAccessToken(req.user.username);
-    res.cookie('access-token', authToken, { maxAge: 1800000, httpOnly: true });
     return res.json({'access-token': authToken}).status(200);
   
   });
