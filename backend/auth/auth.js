@@ -6,11 +6,11 @@ const {jwtSecret,jwtAcssesTokenExpireTime,jwtRefreshTokenExpireTime} = require('
 
 // ? JWT AUTHENTICATION ==========================================================
 // $ generate tokens -----------------------------
-function generateAccessToken(user) {
-    return jwt.sign({ id:user.identity.toNumber(),username: user.properties.username,type:1 },jwtSecret, { expiresIn : jwtAcssesTokenExpireTime }); // expires in 30 min
+function generateAccessToken(userID,username) {
+    return jwt.sign({ id:userID,username:username,type:1 },jwtSecret, { expiresIn : jwtAcssesTokenExpireTime }); // expires in 30 min
 }
-function generateRefreshToken(user) {
-    return jwt.sign({ id:user.identity.toNumber(),username:user.properties.username,type:0 },jwtSecret, { expiresIn : jwtRefreshTokenExpireTime }); // expires in 7 days
+function generateRefreshToken(userID,username) {
+    return jwt.sign({ id:userID,username:username,type:0 },jwtSecret, { expiresIn : jwtRefreshTokenExpireTime }); // expires in 7 days
 }
 
 

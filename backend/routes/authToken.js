@@ -3,6 +3,8 @@ const router = express.Router();
 const auth = require('../auth/auth');
 const crypto = require("crypto");
 const {session, driver} = require('../config/db');
+const settings = require('../config/settings');
+const jwt = require('jsonwebtoken');
 // ? Login =====================================================================================
 router.post('/login', async (req, res) => {
     console.log(req.body);
@@ -14,8 +16,8 @@ router.post('/login', async (req, res) => {
       if (user == null) return res.json({message : 'wrong username or password'}).status(400);
       else{
         console.log("authentification success");
-        let accessToken = auth.generateAccessToken(user);
-        let refreshToken = auth.generateRefreshToken(user);
+        let accessToken = auth.generateAccessToken(id=user.identity.toNumber(), username=user.properties.username);
+        let refreshToken = auth.generateRefreshToken(id=user.identity.toNumber(), username=user.properties.username);
         // TODO:refresh token
         return res.json({'access-token': accessToken,'refresh-token': refreshToken}).status(200);
       }
@@ -24,12 +26,16 @@ router.post('/login', async (req, res) => {
   });
 
 
-router.post('/refreshToken',auth.loginRequired, (req, res) => {
+router.post('/refreshToken', (req, res) => {
     // validate the refresh token
     let refreshToken = req.body['refresh-token'];
-    console.log(refreshToken);
-    let authToken = auth.generateAccessToken(req.user.username);
-    return res.json({'access-token': authToken}).status(200);
+    if (refreshToken == null) return res.sendStatus(401);
+
+    jwt.verify(refreshToken, settings.jwtSecret, (err, user) => {
+        if (err) return res.sendStatus(403);
+        let authToken = auth.generateAccessToken(user.id,user.username);
+        return res.json({'access-token': authToken}).status(200);
+    });
   
   });
 
