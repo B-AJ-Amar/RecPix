@@ -4,6 +4,7 @@ node_modules
 .templates_backup
 *.todo
 *.TODO
+frontendTS
 
 # Logs
 logs

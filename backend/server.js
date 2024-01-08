@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 // const session = require('express-session');
 var partials      = require('express-partials');
 const path = require('path');
@@ -22,6 +23,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(partials()); // use partials to fix include problem
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());

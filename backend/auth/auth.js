@@ -17,24 +17,30 @@ function generateRefreshToken(userID,username) {
 
 function isAuthenticated(req, res, next) {
     // Bearer TOKEN Authorization
+    console.log('FROM IS AUTH',req.body);
     let Token = req.headers['access-token'] ;
     if (Token == null) return next();
 
     console.log(Token);
+    console.log(req.user);
     jwt.verify(Token, jwtSecret, (err, user) => {
-        if (err) next();
+        if (typeof err !== "undefined") {return next();}
         if (!user.type){
             user = null; // if the user use refresh token
             next();
         }
-        console.log(user,user.type);
-        req.user = user; // like request.user in django
+        // req.user = user; // like request.user in django
+        const newData = Object.assign({}, req, {
+            user: user,
+          });
+          req = newData;
         next();
     })
 }
 
     
 function isLoggedin(req, res, next) {
+    console.log(req.user);
     if (req.user) next();
     else res.json({"message" : "you are not logged in"}).status(401);
 }
