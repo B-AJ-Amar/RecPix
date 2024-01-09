@@ -37,9 +37,9 @@ function validate_password(req,res,next) {
 function validate_text(text){
     if (text == null) return '';
     let t = String(text).trim(); // remoeve spaces from start and end
-    t = text.replace(/'/g, "\\'"); // escape '
-    t = text.replace(/"/g, '\\"'); // escape "
-    t.replace(/\\/g, "\\\\"); // escape \
+    t = t.replace(/'/g, "\\'"); // escape '
+    t = t.replace(/"/g, '\\"'); // escape "
+    t = t.replace(/\\/g, "\\\\"); // escape \
     return t;
 }
 

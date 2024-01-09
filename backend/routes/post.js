@@ -20,68 +20,39 @@ const memUploadPost = multer({ storage: memStorePost })
 
  // % todo :, limits: { fileSize: 1000000 }  1MB
 // the basic save file function
-router.post('/', memUploadPost.single("image"), (req, res) => {
-  const fileBuffer = req.file.buffer;
-  const originalFileName = req.file.originalname;
-  const fileName = `${Date.now()}_${originalFileName}`;
-  const uploadDir = `uploads/`
 
+// ? new post =====================================================================================
+router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, res) => {
+   //* validate title and description ============================
+  let title = middlewares.validate_text(req.body.title) || "No Title";
+  let description = middlewares.validate_text(req.body.description) || "No Description";
+
+  const fileBuffer = req.file.buffer;
+  const fileName = `${Date.now()}_${req.file.originalname}`;
+  const uploadDir = path.join('uploads',`user-${String(req.user.id)}`,'posts'); 
+  const uploadPath = path.join(uploadDir, fileName); 
+  // * validate file ===========================================
+  if (!req.file) {
+    return res.status(400).send('No files were uploaded.');
+  }
+  //* save the post in database to get the id ===================
+  const quary = await session.run(`
+      MATCH (u:User) 
+      WHERE id(u)=${req.user.id} 
+      CREATE (u)-[:POSTED]->(p:Post{description:"${description}",title:"${title}",path:"${middlewares.validate_text(uploadPath)}"}) 
+      RETURN p`
+  );
+  //* save file =============================================
+  
   // ? if the directory does not exist create it
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
-  fs.writeFileSync(`uploads/${fileName}`, fileBuffer);
+  console.log("saving file");
+  fs.writeFileSync(uploadPath,fileBuffer);
 
 
   return res.json({ "message": "file uploaded" });
-
-
 });
-
-// ? new post =====================================================================================
-// router.post('/',auth.loginRequired, async (req, res) => {
-//   console.log("Hello from post");
-//   console.log("from post: ",req.body,req.files);
-//   //* validate title and description ============================
-//   let title = middlewares.validate_text(req.body.title) || "No Title";
-//   let description = middlewares.validate_text(req.body.description) || "No Description";
-//   //* validate file =============================================
-  
-//   if (!req.files || Object.keys(req.files).length === 0) {
-//     return res.status(400).send('No files were uploaded.');
-//   }
-//   console.log("validating file success");
-//   //* save the post in database to get the id ===================
-//   // % hadi akhir 7aja wsaltelha knt raya7 ncreate post w ndirou fl path ta3ou 
-//   // % lazm ndir validation le tesxts \' ...
-//   // % chouf NEO4j 
-//   // % countires nodes 
-
-//   const quary = await session.run(`MATCH (u:User) WHERE id(u)=${req.user.id} CREATE (u)-[posted]->(p:Post{description:"${description}",title:"${title}") RETURN p`);
-
-
-//   const uploadedFile = req.files.file; // ? file name is file
-//   const uploadDir = path.join(settings.baseDir , 'uploads','posts',`user-${String(req.user.id)}`); 
-//   const uploadPath = path.join(uploadDir, uploadedFile.name); 
-
-//   // ? if the directory does not exist create it
-//   if (!fs.existsSync(uploadDir)) {
-//     fs.mkdirSync(uploadDir, { recursive: true });
-//   }
-
-//   // ? move the file to the directory
-//   uploadedFile.mv(uploadPath, (err) => {
-//     if (err) {
-//       return res.status(500).send({'message':err});
-//     }
-
-//     res.status(201).json({'message':'File uploaded!'});
-//   });
-
-//   // get the post id
-//   const postID = quary.records[0].get(0).identity;
-//   console.log("from create post printing POST ID : ",postID.low,postID.toNumber());
-//   // await session.run(`MATCH (u:User) WHERE id(u)=${req.user.id} `);
-// });
 
 module.exports = router;
