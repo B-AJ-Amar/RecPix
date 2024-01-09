@@ -1,6 +1,6 @@
 // this file contains the global settings for the backend. (like django settings.py)
 
-const baseDir = __dirname ;
+const baseDir = `${__dirname}/..` ;
 const port = 3000;
 const origin = `http://localhost:${port}`;
 
