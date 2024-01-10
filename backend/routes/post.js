@@ -10,12 +10,10 @@ const multer = require('multer');
 
 const router = express.Router();
 
-// ! akhir 7aja 9drt nsave file , mazel dynamique path
-// ! lasm nchouf kifah nb3at path ll function 
 
 // my idea is to store the file in memory temporarly and then move it to the right path after makeing some logic
 const memStorePost = multer.memoryStorage()
-const memUploadPost = multer({ storage: memStorePost })
+const memUploadPost = multer({ storage: memStorePost,limits: { fileSize: 1000000 } })
 
 
  // % todo :, limits: { fileSize: 1000000 }  1MB
@@ -41,18 +39,47 @@ router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, re
       WHERE id(u)=${req.user.id} 
       CREATE (u)-[:POSTED]->(p:Post{description:"${description}",title:"${title}",path:"${middlewares.validate_text(uploadPath)}"}) 
       RETURN p`
-  );
-  //* save file =============================================
+  ).then(result => {
+    console.log("createing  :",result)
+    if (result.records.length == 0) return res.status(400).json({ "message": "post not created" })
+    //* save file =============================================
+    
+    // ? if the directory does not exist create it
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    console.log("saving file");
+    fs.writeFileSync(uploadPath,fileBuffer);
   
-  // ? if the directory does not exist create it
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
-  console.log("saving file");
-  fs.writeFileSync(uploadPath,fileBuffer);
+  
+    return res.status(201).json({ "message": "file uploaded" });
 
-
-  return res.json({ "message": "file uploaded" });
+  }).catch(err =>{
+    console.log("create post error : ",err)
+    return res.status(400).json({ "message": "somthing went wrong" })
+  });
 });
+
+// !!! i should update this (validate ID)
+// ? delete post =====================================================================================
+router.delete('/:id', auth.loginRequired, async (req, res) => {
+  console.log("deleting post",req.params.id,req.user.id)
+  let id = Number(req.params.id);
+  const quary = await session.run(`
+      MATCH (u:User)-[POSTED]->(p:Post) 
+      WHERE id(p)=${id} AND id(u)=${req.user.id} 
+      DETACH DELETE p`).then(result => {
+  
+        if (result.records.length == 0) return res.status(404).json({ "message": "post not found" })
+
+    return res.json({ "message": "post deleted" })
+  }).catch(err => {
+    console.log("delete post error :")
+    return res.status(400).json({ "message": "post not found" })
+  });
+
+});
+
+// TODO : UPDATE
 
 module.exports = router;
