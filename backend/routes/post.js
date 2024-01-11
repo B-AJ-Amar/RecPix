@@ -37,7 +37,7 @@ router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, re
   const quary = await session.run(`
       MATCH (u:User) 
       WHERE id(u)=${req.user.id} 
-      CREATE (u)-[:POSTED]->(p:Post{description:"${description}",title:"${title}",path:"${middlewares.validate_text(uploadPath)}"}) 
+      CREATE (u)-[:POSTED]->(p:Post{ description:"${description}",title:"${title}",created:datetime({timezone:"${settings.timezone}"}), path:"${middlewares.validate_text(uploadPath)}"}) 
       RETURN p`
   ).then(result => {
     console.log("createing  :",result)
@@ -60,7 +60,6 @@ router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, re
   });
 });
 
-// !!! i should update this (validate ID)
 // ? delete post =====================================================================================
 router.delete('/:id', auth.loginRequired, async (req, res) => {
   console.log("deleting post",req.params.id,req.user.id)
@@ -80,6 +79,44 @@ router.delete('/:id', auth.loginRequired, async (req, res) => {
 
 });
 
-// TODO : UPDATE
+// ? update post =====================================================================================
+router.patch("/:id",auth.loginRequired, async (req, res) => {
+  console.log("updating post",req.params.id,req.user.id)
+  let id = Number(req.params.id);
+  let title = middlewares.validate_text(req.body.title) || null;
+  let description = middlewares.validate_text(req.body.description) || null;
+  let setQuary = "";
+  if (title) setQuary += ` SET p.title="${title}" `;
+  if (description) setQuary += (title)? ` , p.description="${description}" ` :` SET p.description="${description}" `;
+
+  if (!setQuary.length) return res.status(400).json({ "message": "no data to update" })
+
+  const quary = await session.run(`
+      MATCH (u:User)-[POSTED]->(p:Post) 
+      WHERE id(p)=${id} AND id(u)=${req.user.id} 
+      ${setQuary} 
+      RETURN p`).then(result => {
+  
+        if (result.records.length == 0) return res.status(404).json({ "message": "post not found" })
+      return res.json({ "message": "post updated" })
+
+  }).catch(err => {
+    console.log("update post error :")
+    return res.status(400).json({ "message": "post not found" })
+  });
+
+
+})
+
+// ? this function will run before any request with id param
+router.param('id', (req, res, next, id) => {
+  if (!isNaN(id)){
+    req.params.id = parseInt(id);
+    return next();
+  }
+  return res.status(400).json({ "message": "wrong id format" });
+
+})
+
 
 module.exports = router;
