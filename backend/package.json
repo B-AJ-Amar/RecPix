@@ -22,5 +22,9 @@
     "neo4j-driver": "^5.15.0",
     "nodemon": "^3.0.1",
     "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.8",
+    "typescript": "^5.3.3"
   }
 }
