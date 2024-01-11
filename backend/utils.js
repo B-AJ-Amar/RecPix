@@ -19,16 +19,16 @@ MATCH (u:User) WHERE id(u) = userId
 CREATE (u)-[:LIKES]->(p);
 */
 
-function createPost(user,post,categories=null){
-    if (user == null || post == null) return null;
+// function createPost(user,post,categories=null){
+//     if (user == null || post == null) return null;
 
    
-    const quary = `
-    MATCH 
-        (u:User) WHERE id(u)=${user.id} 
-    CREATE 
-        (u)-[posted]->(p:Post{description:"${post.description}",title:"${post.title}"}) 
+//     const quary = `
+//     MATCH 
+//         (u:User) WHERE id(u)=${user.id} 
+//     CREATE 
+//         (u)-[posted]->(p:Post{description:"${post.description}",title:"${post.title}"}) 
     
-    RETURN u
-    `;
-}
+//     RETURN u
+//     `;
+// }
