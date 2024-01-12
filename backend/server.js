@@ -13,7 +13,8 @@ const app = express();
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
   });
-  
+
+
 
 //* Middleware =======================================================================================================
 app.use('/static',express.static('public'));
@@ -38,3 +39,19 @@ app.use((req, res, next) => {
 
 //* Routes ===========================================================================================================
  app.use('/', routes);
+
+const { graphqlHTTP } = require('express-graphql');
+
+const schema = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
+
+
+// graphql 
+ app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    rootValue: resolvers,
+    graphiql: true,
+  })
+);
