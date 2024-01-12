@@ -14,21 +14,20 @@ function generateRefreshToken(userID,username) {
 }
 
 
-
 function isAuthenticated(req, res, next) {
     // Bearer TOKEN Authorization
     let Token = req.headers['access-token'] ;
     if (Token == null) return next();
-
-    console.log(Token);
+    
     jwt.verify(Token, jwtSecret, (err, user) => {
-        if (err) next();
+        if (err != null ) {return next();}
+
         if (!user.type){
             user = null; // if the user use refresh token
             next();
         }
-        console.log(user,user.type);
-        req.user = user; // like request.user in django
+ 
+        req.user = user;
         next();
     })
 }

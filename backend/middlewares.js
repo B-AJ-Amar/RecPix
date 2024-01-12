@@ -34,8 +34,18 @@ function validate_password(req,res,next) {
     next();
 }
 
+function validate_text(text){
+    if (text == null) return '';
+    let t = String(text).trim(); // remoeve spaces from start and end
+    t = t.replace(/'/g, "\\'"); // escape '
+    t = t.replace(/"/g, '\\"'); // escape "
+    t = t.replace(/\\/g, "\\\\"); // escape \
+    return t;
+}
+
 module.exports = {
     validate_username,
     validate_email,
-    validate_password
+    validate_password,
+    validate_text
 }
