@@ -1,6 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-// const session = require('express-session');
+const bodyParser = require('body-parser');
 var partials      = require('express-partials');
 const path = require('path');
 
@@ -22,14 +22,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(partials()); // use partials to fix include problem
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.urlencoded());
+// app.use(express.urlencoded());
 app.use(cookieParser());
-// app.use(session({
-//     secret:"secret key",
-//     resave: false, // don't save session if unmodified
-//     saveUninitialized: false // don't create session until something stored
-// }));
 
 
 app.use((req, res, next) => {

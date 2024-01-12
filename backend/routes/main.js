@@ -83,12 +83,12 @@ router.post('/signup',signupMid, async (req, res) => {
     RETURN user;`);
     var users1 = quary1.records.map(record => record.get('user').properties);
     console.log("users len ",users1.length,users1);
-    if (users1.length){ return res.status(400).send('username or email already exists');}
+    if (users1.length){ return res.status(400).json({"message":'username or email already exists'});}
 
     // create user
-    const quary2 = await session.run(`CREATE (u:User{username:"${username}",password:"${password}",email:"${email}"}) RETURN u`);
-    const users = quary2.records.map(record => record.get('u').properties);
-    res.json(users);
+    const quary2 = await session.run(`CREATE (u:User{username:"${username}",password:"${password}",email:"${email}", created:datetime({timezone:"Greenwich"}) }) RETURN u`);
+    // const users = quary2.records.map(record => record.get('u').properties);
+    res.json({"message":"user created successfully"}).status(201);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');

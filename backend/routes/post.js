@@ -1,48 +1,122 @@
 const express = require('express');
-const router = express.Router();
 const auth = require('../auth/auth');
 const { session, driver } = require('../config/db');
-const fileUpload = require('express-fileupload');
 
 const path = require('path'); // Path
 const fs = require('fs'); // File System
-
 const settings = require('../config/settings');
+const middlewares = require('../middlewares');
+const multer = require('multer');
 
-router.use(fileUpload());
+const router = express.Router();
+
+
+// my idea is to store the file in memory temporarly and then move it to the right path after makeing some logic
+const memStorePost = multer.memoryStorage()
+const memUploadPost = multer({ storage: memStorePost,limits: { fileSize: 1000000 } })
+
+
+ // % todo :, limits: { fileSize: 1000000 }  1MB
+// the basic save file function
 
 // ? new post =====================================================================================
-router.post('/', async (req, res) => {
+router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, res) => {
+   //* validate title and description ============================
+  let title = middlewares.validate_text(req.body.title) || "No Title";
+  let description = middlewares.validate_text(req.body.description) || "No Description";
 
-  console.log(req.body,req.files);
-  //* validate title and description ============================
-  let title = req.body.title || "No Title";
-  let description = req.body.description || "No Description";
-  title = String(title).trim();
-  description = String(description).trim();
-  if (!title.length) title = 'No Title';
-  if (!description.length) description = 'No Description';
-  //* validate file =============================================
-  
-  if (!req.files || Object.keys(req.files).length === 0) {
+  const fileBuffer = req.file.buffer;
+  const fileName = `${Date.now()}_${req.file.originalname}`;
+  const uploadDir = path.join('uploads',`user-${String(req.user.id)}`,'posts'); 
+  const uploadPath = path.join(uploadDir, fileName); 
+  // * validate file ===========================================
+  if (!req.file) {
     return res.status(400).send('No files were uploaded.');
   }
-  
-  const uploadedFile = req.files.file;
-  const uploadDir = path.join(settings.baseDir , 'uploads');
-  const uploadPath = path.join(uploadDir, uploadedFile.name);
-
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
-
-  uploadedFile.mv(uploadPath, (err) => {
-    if (err) {
-      return res.status(500).send({'message':err});
+  //* save the post in database to get the id ===================
+  const quary = await session.run(`
+      MATCH (u:User) 
+      WHERE id(u)=${req.user.id} 
+      CREATE (u)-[:POSTED]->(p:Post{ description:"${description}",title:"${title}",created:datetime({timezone:"${settings.timezone}"}), path:"${middlewares.validate_text(uploadPath)}"}) 
+      RETURN p`
+  ).then(result => {
+    console.log("createing  :",result)
+    if (result.records.length == 0) return res.status(400).json({ "message": "post not created" })
+    //* save file =============================================
+    
+    // ? if the directory does not exist create it
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
+    console.log("saving file");
+    fs.writeFileSync(uploadPath,fileBuffer);
+  
+  
+    return res.status(201).json({ "message": "file uploaded" });
 
-    res.status(201).json({'message':'File uploaded!'});
+  }).catch(err =>{
+    console.log("create post error : ",err)
+    return res.status(400).json({ "message": "somthing went wrong" })
   });
 });
+
+// ? delete post =====================================================================================
+router.delete('/:id', auth.loginRequired, async (req, res) => {
+  console.log("deleting post",req.params.id,req.user.id)
+  let id = Number(req.params.id);
+  const quary = await session.run(`
+      MATCH (u:User)-[POSTED]->(p:Post) 
+      WHERE id(p)=${id} AND id(u)=${req.user.id} 
+      DETACH DELETE p`).then(result => {
+  
+        if (result.records.length == 0) return res.status(404).json({ "message": "post not found" })
+
+    return res.json({ "message": "post deleted" })
+  }).catch(err => {
+    console.log("delete post error :")
+    return res.status(400).json({ "message": "post not found" })
+  });
+
+});
+
+// ? update post =====================================================================================
+router.patch("/:id",auth.loginRequired, async (req, res) => {
+  console.log("updating post",req.params.id,req.user.id)
+  let id = Number(req.params.id);
+  let title = middlewares.validate_text(req.body.title) || null;
+  let description = middlewares.validate_text(req.body.description) || null;
+  let setQuary = "";
+  if (title) setQuary += ` SET p.title="${title}" `;
+  if (description) setQuary += (title)? ` , p.description="${description}" ` :` SET p.description="${description}" `;
+
+  if (!setQuary.length) return res.status(400).json({ "message": "no data to update" })
+
+  const quary = await session.run(`
+      MATCH (u:User)-[POSTED]->(p:Post) 
+      WHERE id(p)=${id} AND id(u)=${req.user.id} 
+      ${setQuary} 
+      RETURN p`).then(result => {
+  
+        if (result.records.length == 0) return res.status(404).json({ "message": "post not found" })
+      return res.json({ "message": "post updated" })
+
+  }).catch(err => {
+    console.log("update post error :")
+    return res.status(400).json({ "message": "post not found" })
+  });
+
+
+})
+
+// ? this function will run before any request with id param
+router.param('id', (req, res, next, id) => {
+  if (!isNaN(id)){
+    req.params.id = parseInt(id);
+    return next();
+  }
+  return res.status(400).json({ "message": "wrong id format" });
+
+})
+
 
 module.exports = router;
