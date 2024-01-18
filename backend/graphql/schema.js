@@ -1,10 +1,20 @@
 const { buildSchema } = require('graphql');
 
 const schema = buildSchema(`
+  type User{
+    name: String
+    id:Int
+  }
+  type RandomDie {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!): [Int]
+  }
   type Query {
     hello: String
+    getUser:User
     random: Float!
-    rollDice(numDice: Int!, numSides: Int): [Int]
+    getDie(numSides: Int): RandomDie
     
   }
 `);

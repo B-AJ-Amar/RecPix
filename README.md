@@ -9,6 +9,7 @@ RecPix is a web application developed using Express ,React and Neo4j, aimed at p
 - React: A JavaScript library for building user interfaces.
 - Express: A minimal and flexible Node.js web application framework.
 - Neo4j: A graph database management system.
+- Graphql : A query language for APIs
 
 ## Features
 

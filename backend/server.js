@@ -42,16 +42,17 @@ app.use((req, res, next) => {
 
 const { graphqlHTTP } = require('express-graphql');
 
-const schema = require('./graphql/schema');
-const resolvers = require('./graphql/resolvers');
+// const schema = require('./graphql/schema');
+// const resolvers = require('./graphql/resolvers');
+const graphqlSchema = require("./graphql/index");
 
 
 // graphql 
  app.use(
   '/graphql',
   graphqlHTTP({
-    schema,
-    rootValue: resolvers,
+    schema:graphqlSchema,
+    // rootValue: resolvers,
     graphiql: true,
   })
 );
