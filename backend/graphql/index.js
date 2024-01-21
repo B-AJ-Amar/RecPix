@@ -4,8 +4,26 @@ const {
   GraphQLInt,
   GraphQLString,
   GraphQLList,
-} =  require("graphql");;
+} =  require("graphql");
 
+/*
+the lats thing tha i did is decide to use GraphQLObjectType instead of buildSchema
+
+app.use('/graphql', graphqlHTTP((req) => ({
+  ...
+  context: { req },  // Pass the entire req object  to context
+
+  const resolvers = {
+  Query: {
+    getUser: (parent, args, context) => {
+      const { req } = context;
+      ? authMiddleware(req);
+      .....
+  },
+};
+})));
+
+*/
 
 // TODO : switch form rest to graphql
 // *=======================================
@@ -15,24 +33,13 @@ const testUsers = [
     { email: 'user3@example.com', created: '2022-01-20', username: 'user3', password: 'password3' }
   ];
   
-const UserType = new GraphQLObjectType({
-    name: "User",
-    fields: () =>({
-        id:{type:GraphQLInt} ,
-        password:{type:GraphQLString},
-        email:{type:GraphQLString},
-        created:{type:GraphQLString},
-        username:{type:GraphQLString}
 
-    }),
-
-})
-
+const {UserType} = require("./TypeDefs/UserType");
 
 // *=======================================
 // quary : get
 const RootQuery = new GraphQLObjectType({
-    name: "RootQueryType",
+    name: "Query",
     fields: {
       getAllUsers: {
         type: new GraphQLList(UserType),
@@ -58,12 +65,13 @@ const RootQuery = new GraphQLObjectType({
         },
         resolve(parent, args) {
             testUsers.push({
-            id: userData.length + 1,
+            id: testUsers.length + 1,
             firstName: args.firstName,
             lastName: args.lastName,
             email: args.email,
             password: args.password,
           });
+          console.log(args)
           return args;
         },
       },
