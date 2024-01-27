@@ -37,9 +37,20 @@ function isLoggedin(req, res, next) {
     if (req.user) next();
     else res.json({"message" : "you are not logged in"}).status(401);
 }
+
 // list of login required midelewares
 const loginRequired = [isAuthenticated, isLoggedin];
 
+// graphql login required middleware
+const loginReqGql = (req,res,next) => {
+    const nextWrapper = () => {};
+    isAuthenticated(req,res,nextWrapper);
+    if (!req.user) {
+      const error = new Error('Not authenticated!');
+    //   error.statusCode  = 401;
+      throw error;
+    }
+  }
 
 function authenticate(username,password) {
     if (password == null || username == null) return 0;
@@ -68,5 +79,6 @@ module.exports = {
     isAuthenticated,
     generateAccessToken,
     generateRefreshToken,
-    loginRequired
+    loginRequired,
+    loginReqGql
 }
