@@ -1,22 +1,21 @@
-const { buildSchema } = require('graphql');
+const {gql } = require("apollo-server-express")
 
-const schema = buildSchema(`
+const typeDefs = gql`
   type User{
-    name: String
-    id:Int
+    id: ID
+    username: String
+    email: String
+    img: String
+    gender: Boolean
   }
-  type RandomDie {
-    numSides: Int!
-    rollOnce: Int!
-    roll(numRolls: Int!): [Int]
-  }
+
   type Query {
     hello: String
-    getUser:User
-    random: Float!
-    getDie(numSides: Int): RandomDie
-    
+    auth_test: String
+    getUser(id:Int,username:String): User
+    reactPost(postId:Int!,reaction:Boolean!): Int
   }
-`);
 
-module.exports = schema;
+`
+
+module.exports = {typeDefs};

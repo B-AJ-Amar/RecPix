@@ -1,22 +1,43 @@
-const express = require('express');
+const express      = require('express');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-var partials      = require('express-partials');
-const path = require('path');
+const bodyParser   = require('body-parser');
+var partials       = require('express-partials');
+const path         = require('path');
 
-const routes = require('./routes');
-
-const {port} = require('./config/settings');
+const routes       = require('./routes');
+const {port}       = require('./config/settings');
+// for offline development
+// const {ApolloServerPluginLandingPageGraphQLPlayground} = require("apollo-server-core");
 
 //*config ============================================================================================================
-const app = express();
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+const {ApolloServer} = require("apollo-server-express")
+const {typeDefs}     = require("./graphql/schema")
+const {resolvers}    = require("./graphql/resolvers")
+
+// //! there is a problem in this verion of apollo server i found this solution and i will use ti temporarely
+const server = new ApolloServer({ 
+  typeDefs,
+  resolvers ,
+  context: ({ req, res,next }) => ({req,res,next}),
+  formatError: (error) => {
+    const { message, path } = error;
+    return { message, path };
+  },
+ } );
+// plugins: [
+//   ApolloServerPluginLandingPageGraphQLPlayground(),
+// ]
+async function startServer() {
+  await server.start();
+  const app =  express();
+
+  server.applyMiddleware({ app,path:"/graphql" });
+
+  app.listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}\nGraphql server on http://localhost:${port}/graphql`);
   });
-
-
-
-//* Middleware =======================================================================================================
+  
+  //* Middleware =======================================================================================================
 app.use('/static',express.static('public'));
 app.set('/media', express.static('media'));
 app.set('view engine', 'ejs');
@@ -37,22 +58,13 @@ app.use((req, res, next) => {
   })
 
 
-//* Routes ===========================================================================================================
- app.use('/', routes);
-
-const { graphqlHTTP } = require('express-graphql');
-
-// const schema = require('./graphql/schema');
-// const resolvers = require('./graphql/resolvers');
-const graphqlSchema = require("./graphql/index");
-
-
-// graphql 
- app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema:graphqlSchema,
-    // rootValue: resolvers,
-    graphiql: true,
-  })
-);
+  //* Routes ===========================================================================================================
+  app.use('/', routes); //HTTP
+  
+  
+  
+  
+  
+  //  *===============================================================================
+}
+  startServer();
