@@ -37,7 +37,13 @@ router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, re
   const quary = await session.run(`
       MATCH (u:User) 
       WHERE id(u)=${req.user.id} 
-      CREATE (u)-[:POSTED]->(p:Post{ description:"${description}",title:"${title}",created:datetime({timezone:"${settings.timezone}"}), path:"${middlewares.validate_text(uploadPath)}"}) 
+      CREATE (u)-[:POSTED]->(p:Post{ 
+        description:"${description}",
+        title:"${title}",
+        isActive:true, 
+        isArchived:true,
+        createdAt:datetime({timezone:"${settings.timezone}"}), 
+        path:"${middlewares.validate_text(uploadPath)}"}) 
       RETURN p`
   ).then(result => {
     console.log("createing  :",result)

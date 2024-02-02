@@ -1,0 +1,38 @@
+#! this file is for documentation purposes only
+#* Nodes
+User:
+    id: ID
+    name: String
+    email: String
+    password: String
+    createdAt: datetime
+    img: String
+    isActive: Boolean
+    isSuperuser: Boolean
+
+Post:
+    id: ID
+    title: String
+    content: String
+    createdAt: datetime
+    # updatedAt: datetime
+    isActive: Boolean
+    isArchived: Boolean
+    path: String
+
+Category:
+    id: ID
+    name: String
+    isActive: Boolean
+    createdAt: datetime
+
+#* relations
+
+POSTS: (User) -> [Post]
+
+LIKES: (User) -> [Post]
+
+BLOCKS: (User) -> [User]
+
+FOLLOWS: (User) -> [User]
+

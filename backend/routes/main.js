@@ -3,7 +3,7 @@ const router = express.Router();
 const { session, driver } = require('../config/db'); 
 const middleware = require('../middlewares');
 const auth = require('../auth/auth');
-
+const {timezone, defaultUserImgPath } = require("../config/settings");
 
 // middlewares for signup
 const signupMid = [
@@ -86,7 +86,16 @@ router.post('/signup',signupMid, async (req, res) => {
     if (users1.length){ return res.status(400).json({"message":'username or email already exists'});}
 
     // create user
-    const quary2 = await session.run(`CREATE (u:User{username:"${username}",password:"${password}",email:"${email}",img:"uploads/default/default_user_img.png", created:datetime({timezone:"Greenwich"}) }) RETURN u`);
+    const quary2 = await session.run(`CREATE (
+        u:User{username:"${username}",
+        password:"${password}",
+        email:"${email}",
+        img:"${defaultUserImgPath}", 
+        isActive:true,
+        isStaff:false,
+        isSuperuser:false, 
+        createdAt:datetime({timezone:"${timezone}"}) }) 
+      RETURN u`);
     // const users = quary2.records.map(record => record.get('u').properties);
     res.json({"message":"user created successfully"}).status(201);
   } catch (error) {

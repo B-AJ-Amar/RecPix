@@ -4,7 +4,6 @@ const router = express.Router();
 
 
 const mainRoute = require('./routes/main');
-const userRoute = require('./routes/user');
 const testAPIRoute = require('./routes/testAPI');
 const authTokenRoute = require('./routes/authToken');
 const postRoute = require('./routes/post');
@@ -12,7 +11,6 @@ const postRoute = require('./routes/post');
 router.use('/api/post', postRoute);
 router.use('/api/authToken', authTokenRoute);
 router.use('/api', mainRoute);
-router.use('/user', userRoute);
 router.use('/testAPI', testAPIRoute);
 
 
