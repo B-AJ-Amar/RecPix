@@ -1,14 +1,21 @@
-const { exit } = require('process');
-const auth = require('../auth/auth');
-const {GraphQLError} = require('graphql/error');
-const {loginReqGql} = require('../auth/auth');
-const middleware = require('../middlewares');
-const { session, driver } = require('../config/db'); 
-const { timezone } = require("../config/settings"); 
 
+const { 
+  getUser, 
+  followUser, 
+  unfollowUser, 
+  getFollowers,
+  getFollowings,
+  searchUsers, 
+  blockUser, 
+  unblockUser 
+} = require('./resolvers/user');
 
-const { getUser, followUser, unfollowUser, getFollowers, blockUser, unblockUser } = require('./resolvers/user');
-const  {  likePost, unlikePost } = require('./resolvers/post');
+const  {  
+  likePost, 
+  unlikePost,
+  getPosts,
+  getArchivedPosts,
+} = require('./resolvers/post');
 
 // TODO : validate input
 const resolvers = {
@@ -16,19 +23,18 @@ const resolvers = {
     hello: (root, args, { req,res }) => {
       return 'World'
     },
-    auth_test:  (root, args, { req,res }) => {
-      loginReqGql(req,res);
-
-      return 'auth';
-    
-    },
-
+    // * Post resolvers ================================================================================================
+    // quarries
+    getPosts,
+    getArchivedPosts,
     // *User resolvers ================================================================================================
     // quarries
     getUser,
     getFollowers,
+    getFollowings,
+    searchUsers,
 
-    
+
     // mutations
     followUser,
     unfollowUser,

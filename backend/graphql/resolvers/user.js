@@ -6,6 +6,9 @@ const {GraphQLError} = require('graphql/error');
 
 
 
+// ? ==========================================================================
+// ? Quaries
+// ? ==========================================================================
 const getUser = async (root, args, { req,res }) => {
     loginReqGql(req,res);
     let attrQuery = "";
@@ -31,6 +34,67 @@ const getUser = async (root, args, { req,res }) => {
 };
 
 
+const getFollowers =  async (root, args, { req,res }) => {
+    loginReqGql(req,res);
+    const session = driver.session();
+    return await session.run(`
+    MATCH (u:${neoUserNode}{ isActive:true })-[f:${neoFollowRel}]->(p:${neoUserNode}{ isActive:true })
+    WHERE id(p) = ${args.userId}
+    RETURN u, id(u) as id`
+    ).then(resault => {
+        const users = []; 
+        users = resault.records.map(record => record.get('u').properties);
+        users.forEach(user => user.id = resault.records[0].get('id').toString());
+        return users;
+    }).catch (error => {
+        console.log(error);
+        return new GraphQLError("somthing went wrong");
+    })
+}
+
+const getFollowings =  async (root, args, { req,res }) => {
+    loginReqGql(req,res);
+    const session = driver.session();
+    return await session.run(`
+    MATCH (u:${neoUserNode}{ isActive:true })<-[f:${neoFollowRel}]-(p:${neoUserNode}{ isActive:true })
+    WHERE id(p) = ${args.userId}
+    RETURN u, id(u) as id`
+    ).then(resault => {
+        const users = []; 
+        users = resault.records.map(record => record.get('u').properties);
+        users.forEach(user => user.id = resault.records[0].get('id').toString());
+        return users;
+    }).catch (error => {
+        console.log(error);
+        return new GraphQLError("somthing went wrong");
+    })
+}
+
+
+// const sujestUsers =  async (root, args, { req,res }) => {}
+
+const searchUsers =  async (root, args, { req,res }) => {
+    loginReqGql(req,res);
+    const session = driver.session();
+    return await session.run(`
+    MATCH (u:${neoUserNode}{ isActive:true })
+    WHERE u.username CONTAINS "${args.query}" OR u.email CONTAINS "${args.query}"
+    RETURN u, id(u) as id`
+    ).then(resault => {
+        const users = []; 
+        users = resault.records.map(record => record.get('u').properties);
+        users.forEach(user => user.id = resault.records[0].get('id').toString());
+        return users;
+    }).catch (error => {
+        console.log(error);
+        return new GraphQLError("somthing went wrong");
+    })
+}
+
+
+// ? ==========================================================================
+// ? Mutations 
+// ? ==========================================================================
 
 const followUser =  async (root, args, { req,res }) => {
     loginReqGql(req,res);
@@ -75,23 +139,6 @@ const unfollowUser =  async (root, args, { req,res }) => {
 }
 
 
-const getFollowers =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
-    const session = driver.session();
-    return await session.run(`
-    MATCH (u:${neoUserNode}{ isActive:true })-[f:${neoFollowRel}]->(p:${neoUserNode}{ isActive:true })
-    WHERE id(p) = ${args.userId}
-    RETURN u, id(u) as id`
-    ).then(resault => {
-        const users = []; 
-        users = resault.records.map(record => record.get('u').properties);
-        users.forEach(user => user.id = resault.records[0].get('id').toString());
-        return users;
-    }).catch (error => {
-        console.log(error);
-        return new GraphQLError("somthing went wrong");
-    })
-}
 
 
 
@@ -153,6 +200,8 @@ const unblockUser =  async (root, args, { req,res }) => {
 module.exports = {
     getUser,
     getFollowers,
+    getFollowings,
+    searchUsers,
     followUser,
     unfollowUser,
     blockUser,

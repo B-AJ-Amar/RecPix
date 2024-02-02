@@ -42,7 +42,7 @@ router.post('/',auth.loginRequired, memUploadPost.single("image"), async(req, re
         title:"${title}",
         isActive:true, 
         isArchived:true,
-        created:datetime({timezone:"${settings.timezone}"}), 
+        createdAt:datetime({timezone:"${settings.timezone}"}), 
         path:"${middlewares.validate_text(uploadPath)}"}) 
       RETURN p`
   ).then(result => {
