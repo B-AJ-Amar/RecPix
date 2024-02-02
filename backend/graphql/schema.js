@@ -9,14 +9,22 @@ const typeDefs = gql`
     gender: Boolean
   }
 
+
   type Query {
     hello: String
     auth_test: String
+
     getUser(id:Int,username:String): User
+    getFollowers(userId:Int!): [User]
+
+    # ! mutations : (this is only for test i will fix them later)
     likePost(postId:Int!): Int
     unlikePost(postId:Int!): Int
     followUser(userId:Int!): Int
     unfollowUser(userId:Int!): Int
+    blockUser(userId:Int!): Int
+    unblockUser(userId:Int!): Int
+
   }
 
 `

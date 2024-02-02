@@ -7,7 +7,7 @@ const { session, driver } = require('../config/db');
 const { timezone } = require("../config/settings"); 
 
 
-const { getUser, followUser, unfollowUser } = require('./resolvers/user');
+const { getUser, followUser, unfollowUser, getFollowers, blockUser, unblockUser } = require('./resolvers/user');
 const  {  likePost, unlikePost } = require('./resolvers/post');
 
 // TODO : validate input
@@ -24,14 +24,20 @@ const resolvers = {
     },
 
     // *User resolvers ================================================================================================
-    
+    // quarries
     getUser,
+    getFollowers,
+
     
+    // mutations
     followUser,
     unfollowUser,
 
     likePost,
     unlikePost,
+
+    blockUser,
+    unblockUser
 
 
   }
