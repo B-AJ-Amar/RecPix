@@ -2,11 +2,8 @@ import React, {useState} from 'react'
 import { ModeToggle } from '@/components/mode-toggle'
 import { DropdownMenuDemo } from '@/components/User/AvatarDropDown';
 import { Input } from "@/components/ui/input"
-function Logo(){
-    return (
-        <h1 className=" text-primary font-semibold text-xl">RecPix</h1>
-    )
-}
+import { Sidebar } from "@/components/Nav/sidebar"
+
 
  
 function SearchBar() {
@@ -20,9 +17,9 @@ export default function Nav() {
     console.log(selectedNavItem);
     return (
         <>
-            <header className="max-[680px]:px-0 flex backdrop:blur-md  bg-transparent  sticky top-0 left-0 mx-auto w-full z-50 items-center justify-between  py-3 px-1 sm:px-12   ">
-                <Logo />
-            
+            {/* TODO:  bg-opacity-40 backdrop-blur-md  */}
+            <header className="max-[680px]:px-0 flex  sticky top-0 left-0 mx-auto w-full z-50 items-center justify-between  py-3 px-1 sm:px-12  bg-background ">
+                <Sidebar />
                 <SearchBar />
                 <div className=' items-center justify-center space-x-2 flex'>
                     <DropdownMenuDemo />
