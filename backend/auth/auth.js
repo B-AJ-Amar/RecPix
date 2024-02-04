@@ -60,8 +60,9 @@ function authenticate(username,password) {
     return session.run(query).then(result => {
         if (result.records.length == 0) return null;
         else{
-            console.log(result.records[0].get(0));
-            return result.records[0].get(0);  
+            const user = result.records[0].get(0).properties;
+            user.id = result.records[0].get(0).identity.toNumber();
+            return user 
         } 
     });  
 }

@@ -14,7 +14,8 @@ const jwtSecret = 'e0fb385c27f800fbb82fce3d7515c82e116277e25a95dc2a3d399162f220e
 const jwtAcssesTokenExpireTime = '9999999s' ; // 1800 = 30 min //! i will make it larger for testing 9999999s = 115 days
 const jwtRefreshTokenExpireTime = '604800s' ; // 7 days
 
-
+// refresh token cookie settings
+cookieRTMaxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 // neo4j ========================================================
 const neoUserNode = "User";
@@ -40,6 +41,8 @@ module.exports = {
     jwtSecret,
     jwtAcssesTokenExpireTime,
     jwtRefreshTokenExpireTime,
+
+    cookieRTMaxAge,
 
     // neo4j variables 
     neoUserNode,

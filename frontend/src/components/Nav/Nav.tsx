@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
 import { ModeToggle } from '@/components/mode-toggle'
-import { DropdownMenuDemo } from '@/components/User/AvatarDropDown';
+import { AvatarDropDown } from '@/components/User/AvatarDropDown';
 import { Input } from "@/components/ui/input"
 import { Sidebar } from "@/components/Nav/sidebar"
+import { Outlet } from 'react-router-dom';
+
 
 
  
@@ -22,10 +24,11 @@ export default function Nav() {
                 <Sidebar />
                 <SearchBar />
                 <div className=' items-center justify-center space-x-2 flex'>
-                    <DropdownMenuDemo />
+                    <AvatarDropDown />
                     <ModeToggle />
                 </div>
             </header>
+            <Outlet />
         </>
     )
 }
