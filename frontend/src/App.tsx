@@ -11,10 +11,12 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { useAuth } from "./contexts/AuthContext";
 
 function App() {
-  const { user, isAuthenticated, login, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   console.log(isAuthenticated);
+
   return (
     <>
+  
       <Routes>
         <Route path="/auth" element={  (isAuthenticated)? <Navigate to="/" />: <AuthCard />  } />
         <Route path="/" element={ (isAuthenticated)? <Nav /> : <Navigate to="/auth" /> } >

@@ -19,21 +19,27 @@ import {
 import { ModeToggle } from "@/components/mode-toggle"
 import { Logo } from "../Nav/Logo"
 import { useAuth } from "@/contexts/AuthContext"
-import Nav from "../Nav/Nav"
-import { Navigate } from "react-router-dom"
+import { useRef } from "react"
+import {toast} from "sonner"
 
 export function AuthCard() {
-    const { login } = useAuth();
+    const { login, error } = useAuth();
+    const usernameRef = useRef('');
+    const passwordRef = useRef('');
+
     const loginHandler = () => {
-        login("amar", "4r3e2w1q");
-        return 1;
-        console.log("login");
+        login(usernameRef.current.value, passwordRef.current.value).then(message => {
+            console.log("3333333")
+            if (message) toast.error(message)
+        })
     }
     return (
-        <>
-        <span className="absolute top-5 left-1/2 -translate-x-1/2"><Logo /></span>
-        <span className=" absolute top-2 right-5"><ModeToggle /></span>
-        <div className="flex items-center justify-center h-screen ">
+        <div className=" h-screen">
+        <div className="max-[680px]:px-0 flex  sticky top-0 left-0 mx-auto w-full z-50 items-center justify-between  py-3 px-1 sm:px-12  bg-background ">
+            <Logo />
+            <ModeToggle />
+        </div>
+        <div className="flex flex-col items-center justify-center ">
             <Tabs defaultValue="login" className="w-[400px] overflow-y-scroll no-scrollbar max-h-[75%] mx-auto ">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
@@ -50,11 +56,11 @@ export function AuthCard() {
                 <CardContent className="space-y-2">
                     <div className="space-y-1">
                     <Label htmlFor="username">Username</Label>
-                    <Input id="username"  />
+                    <Input id="username" ref={usernameRef} />
                     </div>
                     <div className="space-y-1">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password"  />
+                    <Input id="password" type="password" ref={passwordRef} />
                     </div>
                 </CardContent>
                 <CardFooter>
@@ -72,12 +78,12 @@ export function AuthCard() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                     <div className="space-y-1">
-                    <Label htmlFor="su_username">username</Label>
+                    <Label htmlFor="su_username">Username</Label>
                     <Input id="su_username" />
                     </div>
 
                     <div className="space-y-1">
-                    <Label htmlFor="su_email">email</Label>
+                    <Label htmlFor="su_email">Email</Label>
                     <Input id="su_email" type="email" />
                     </div>
                     <div className="space-y-1">
@@ -97,6 +103,6 @@ export function AuthCard() {
             </TabsContent>
             </Tabs>
         </div>
-        </>
+        </div>
     )
 }

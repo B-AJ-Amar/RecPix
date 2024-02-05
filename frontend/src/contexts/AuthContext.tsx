@@ -1,7 +1,7 @@
 import React, { useState, useContext, createContext } from "react";
 
 import axios from "axios";
-// import { useLocalStorage } from "@/hooks/useLocalStorage";
+import {toast} from "sonner"
 
 interface UserType{
     username: string
@@ -11,17 +11,6 @@ interface UserType{
     isSuperuser: boolean
 }
 
-interface LoginResType{
-    user: UserType
-    accessToken: string
-}
-
-interface AuthContextProps {
-    user: UserType | null
-    isAuthenticated: boolean
-    login: (username: string, password: string) => void
-    logout: () => void
-}
 
 export const AuthContext = createContext(null);
 
@@ -38,9 +27,10 @@ export function AuthProvider({ children }: { children: React.ReactNode}) {
         const storedAccessToken = localStorage.getItem("access-token");
         return storedAccessToken ? storedAccessToken : null;
       });
+    
 
     const login = (username: string, password: string) => {
-        const data = axios.post('http://localhost:3000/api/authToken/login', {
+        return axios.post('http://localhost:3000/api/authToken/login', {
             "username":username,
             "password":password
         }).then( res => {
@@ -53,14 +43,20 @@ export function AuthProvider({ children }: { children: React.ReactNode}) {
                 localStorage.setItem("access-token", res.data["access-token"]);
                 localStorage.setItem("user", JSON.stringify(res.data.user));
                 localStorage.setItem("isAuthenticated", "1");
-                // setUser(res);
-            //     return true;
+                return;
             }
+            return "Something went wrong"
+
         
         }).catch( err => {
-            console.log(err);
-            return null;
+            if(err.response.status === 400){
+                return "Invalid username or password, please try again"                
+            }
+            return "Something went wrong"
         });
+
+      
+        
     
     }
     const logout = () => {
@@ -74,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode}) {
 
     return (
 
-        <AuthContext.Provider value={ { user , accessToken , isAuthenticated , login , logout } } >
+        <AuthContext.Provider value={ { user , accessToken , isAuthenticated ,  login , logout } } >
             {children}
       </AuthContext.Provider>
     )

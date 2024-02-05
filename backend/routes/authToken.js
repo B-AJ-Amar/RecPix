@@ -36,11 +36,12 @@ router.post('/login', async (req, res) => {
 
 router.post('/refreshToken', (req, res) => {
     // validate the refresh token
-    let refreshToken = req.body['refresh-token'];
+    let refreshToken = req.cookies['refresh-token'];
+    
     if (refreshToken == null) return res.sendStatus(401);
 
     jwt.verify(refreshToken, settings.jwtSecret, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) return res.sendStatus(401);
         let authToken = auth.generateAccessToken(user.id,user.username);
         return res.status(200).json({'access-token': authToken});
     });
