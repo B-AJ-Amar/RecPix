@@ -10,12 +10,31 @@ import {
 import { useState } from "react"
 import { Logo } from "@/components/Nav/Logo"
 import { Button } from "../ui/button"
+import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
     DropdownMenuSeparator,
   } from "@/components/ui/dropdown-menu"
+
 function Sidebar() {
-    const [isOpen, setIsOpen] = useState(false)
+    const navigate = useNavigate();
+    const [selectedNavItem, setselectedNavItem] = useState('0');
+
+    function handleClick({index}) {
+        setselectedNavItem(index);
+        navigate(navLinks[index].path);
+
+    }
+
+    const navLinks = [
+        {name: "Home", path: "/"},
+        {name: "Explore", path: "/explore"},
+        {name: "Trending", path: "/trending"},
+        {name: "Profile", path: "/profile"},
+        {name: "Saved", path: "/saved"},
+    ]
+    
     return (
         <Sheet>
                 <span className=" flex flex-row">
@@ -34,12 +53,11 @@ function Sidebar() {
                     </SheetDescription> */}
                 </SheetHeader>
                 <div className=" flex flex-col py-7 " >
-                    <Button variant={"secondary"}  >Home</Button>
-                    <Button variant={"ghost"} >Explore</Button>
-                    <Button variant={"ghost"}>Trending</Button>
-                    <DropdownMenuSeparator />
-                    <Button variant={"ghost"}>Profile</Button>
-                    <Button variant={"ghost"}>Saved</Button>
+
+                    { navLinks.map((item, index) => (
+                        <Button key={index} onClick={() => {handleClick({index})}} variant={selectedNavItem == index ? "secondary" : "ghost"}>{item.name}</Button>
+
+                    ))}
 
                 </div>
                
