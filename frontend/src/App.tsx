@@ -16,7 +16,6 @@ function App() {
 
   return (
     <>
-  
       <Routes>
         <Route path="/auth" element={  (isAuthenticated)? <Navigate to="/" />: <AuthCard />  } />
         <Route path="/" element={ (isAuthenticated)? <Nav /> : <Navigate to="/auth" /> } >

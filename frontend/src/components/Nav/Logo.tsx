@@ -1,7 +1,7 @@
 
 
-export function Logo(){
+export function Logo( {className}: {className?: string}){
     return (
-        <h1 className=" text-primary font-semibold text-xl">RecPix</h1>
+        <h1 className={`text-primary font-semibold text-xl ${className || '' } ` } >RecPix</h1>
     )
 }
