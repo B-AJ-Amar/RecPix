@@ -9,7 +9,7 @@ import { AuthCard } from "./components/pages/auth";
 import { Navigate, Route, Routes } from "react-router-dom"
 // import {useState, createContext} from "react";
 import { useAuth } from "./contexts/AuthContext";
-
+import {postData} from "./temp"
 function App() {
   const { user, isAuthenticated } = useAuth();
   console.log(isAuthenticated);
@@ -19,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/auth" element={  (isAuthenticated)? <Navigate to="/" />: <AuthCard />  } />
         <Route path="/" element={ (isAuthenticated)? <Nav /> : <Navigate to="/auth" /> } >
-          <Route index element={<ImageList />} />
+          <Route index element={<ImageList data={postData} />} />
         </Route>
         <Route path="/about" element={<About />} /> 
         <Route path="*" element={<h1>Not Found</h1>} />

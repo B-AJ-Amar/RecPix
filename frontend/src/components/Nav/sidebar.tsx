@@ -5,8 +5,7 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
-    SheetFooter
+    SheetTrigger
   } from "@/components/ui/sheet"
 import { useState } from "react"
 import { Logo } from "@/components/Nav/Logo"

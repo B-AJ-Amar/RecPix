@@ -1,53 +1,12 @@
 import React from "react";
-import './ImageList.css';
 import { DropdownList } from "../DropDown/DropDown";
 
-
-
-const data = [
-    { "id":1,
-      "img":"http://localhost:3000/static/images/img-1.jpg"
-    },
-    { "id":2,
-      "img":"http://localhost:3000/static/images/img-2.jpg"
-    },
-    { "id":3,
-      "img":"http://localhost:3000/static/images/img-3.jpg"
-    },
-    { "id":4,
-      "img":"http://localhost:3000/static/images/img-4.jpg"
-    },
-    { "id":5,
-      "img":"http://localhost:3000/static/images/img-5.jpg"
-    },
-    { "id":6,
-      "img":"http://localhost:3000/static/images/img-6.jpg"
-    },
-    { "id":11,
-      "img":"http://localhost:3000/static/images/img-1.jpg"
-    },
-    { "id":12,
-      "img":"http://localhost:3000/static/images/img-2.jpg"
-    },
-    { "id":13,
-      "img":"http://localhost:3000/static/images/img-3.jpg"
-    },
-    { "id":14,
-      "img":"http://localhost:3000/static/images/img-4.jpg"
-    },
-    { "id":15,
-      "img":"http://localhost:3000/static/images/img-5.jpg"
-    },
-    { "id":16,
-      "img":"http://localhost:3000/static/images/img-6.jpg"
-    },
-]
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../ui/button";
 
-// todo : hover effect
+// todo : background color on hover, add user profile on top left 
 function ImageField(props) {
   const [isLiked, setIsLiked] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
@@ -69,7 +28,17 @@ function ImageField(props) {
   )
 }
 
-function ImageList() {
+interface postType{
+  id: string,
+  img: string
+
+}
+
+interface ImageListProps {
+  data: postType[];
+}
+
+function ImageList({data}: ImageListProps) {
   return (
     <div className=" px-9  cloumns-1  min-[480px]:columns-2  md:columns-3  lg:columns-4">
       {data.map(item => (

@@ -6,6 +6,7 @@ import {
     EyeOff,
     UserCheck,
     UserMinus,
+    Plus,
 
   } from "lucide-react"
   
@@ -16,12 +17,8 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuPortal,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
+
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
   
@@ -40,14 +37,18 @@ import {
               <span>Username's Profile</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Download className="mr-2 h-4 w-4" />
-              <span>Save</span>
-            </DropdownMenuItem>
-            {/* TODO: Unfollow */}
-            <DropdownMenuItem>
               <UserCheck className="mr-2 h-4 w-4" />
               <span>Follow</span>
             </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Plus className="mr-2 h-4 w-4" />
+              <span>Save</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Download className="mr-2 h-4 w-4" />
+              <span>Download</span>
+            </DropdownMenuItem>
+            {/* TODO: Unfollow */}
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <EyeOff className="mr-2 h-4 w-4" />
