@@ -22,7 +22,7 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
   
-  export function DropdownList() {
+  export default function DropdownList() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

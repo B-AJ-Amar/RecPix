@@ -26,9 +26,7 @@ export default function Nav() {
                     <ModeToggle />
                 </div>
             </header>
-            <Suspense fallback={<div>Loading...</div>}>
                 <Outlet />
-            </Suspense>
         </>
     )
 }

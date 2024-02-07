@@ -6,9 +6,7 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 
-  import {
-    TabsContent,
-  } from "@/components/ui/tabs"
+
 import { Button } from "../ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

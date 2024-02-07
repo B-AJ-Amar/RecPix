@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from "react-router-dom"
 import { useAuth } from "./contexts/AuthContext";
 import {postData} from "./temp"
+import Loading from "@/components/loading/loading"
 
 // Q: replase all the import wth lazy import?
 
@@ -24,13 +25,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/auth" element={  (isAuthenticated)? <Navigate to="/" />: <AuthCard />  } />
+        <Route path="/auth" element={  (isAuthenticated)? <Navigate to="/" />: <Suspense fallback={<Loading />} ><AuthCard /></Suspense>} />
         <Route path="/" element={ (isAuthenticated)? <Nav /> : <Navigate to="/auth" /> } >
           <Route index element={<HomePage posts={postData} />} />
-          <Route path="/explore" element={<ExplorePage  />} />
-          <Route path="/trending" element={<TrendingPage  />} />
-          <Route path="/saved" element={<SavedPage  />} />
-          <Route path="/profile" element={<ProfilePage  />} />
+          <Route path="/explore"  element={<Suspense fallback={<Loading />} > <ExplorePage  /></Suspense>} />
+          <Route path="/trending" element={<Suspense fallback={<Loading />} > <TrendingPage  /></Suspense>} />
+          <Route path="/saved"    element={<Suspense fallback={<Loading />} > <SavedPage  /></Suspense>} />
+          <Route path="/profile"  element={<Suspense fallback={<Loading />} > <ProfilePage  /></Suspense>} />
         </Route>
         <Route path="/about" element={<About />} /> 
         <Route path="*" element={<h1>Not Found</h1>} />

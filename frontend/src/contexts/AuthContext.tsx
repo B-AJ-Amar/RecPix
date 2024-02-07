@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode}) {
 
         
         }).catch( err => {
-            if(err.response.status === 400){
+            if(err.response && err.response.status === 400){
                 return "Invalid username or password, please try again"                
             }
             return "Something went wrong"

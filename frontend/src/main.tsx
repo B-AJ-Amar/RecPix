@@ -6,7 +6,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './components/theme-provider.tsx'
 
-// import { Toaster } from "@/components/ui/toaster"
 import { Toaster } from "@/components/ui/sonner"
 
 

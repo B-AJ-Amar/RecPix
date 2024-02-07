@@ -5,7 +5,8 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-    SheetTrigger
+    SheetTrigger,
+    SheetClose 
   } from "@/components/ui/sheet"
 import { useState } from "react"
 import { Logo } from "@/components/Nav/Logo"
@@ -44,7 +45,9 @@ function Sidebar() {
                 <div className=" flex flex-col py-7 " >
 
                     { navLinks.map((item, index) => (
-                        <Button key={index} onClick={() => {handleClick({index})}} variant={selectedNavItem == index ? "secondary" : "ghost"}>{item.name}</Button>
+                        <SheetClose asChild>
+                            <Button key={index} onClick={() => {handleClick({index})}} variant={selectedNavItem == index ? "secondary" : "ghost"}>{item.name}</Button>
+                        </SheetClose>
 
                     ))}
 
