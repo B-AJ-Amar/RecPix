@@ -1,24 +1,26 @@
 
-import Nav from '@/components/Nav/Nav'
-
-// pages
-import About from "@/components/pages/about";
-import { AuthCard } from "./components/pages/auth";
-
+import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from "react-router-dom"
-// import {useState, createContext} from "react";
 import { useAuth } from "./contexts/AuthContext";
 import {postData} from "./temp"
 
-import HomePage from "@/components/pages/home";
-import TrendingPage from './components/pages/trending';
-import ExplorePage from './components/pages/explore';
-import SavedPage from './components/pages/saved';
-import ProfilePage from './components/pages/profile';
+// Q: replase all the import wth lazy import?
+
+
+// pages
+const Nav = lazy(() => import('@/components/Nav/Nav'));
+const HomePage = lazy(() => import("@/components/pages/home"));
+const TrendingPage = lazy(() => import('./components/pages/trending'));
+const ExplorePage = lazy(() => import('./components/pages/explore'));
+const SavedPage = lazy(() => import('./components/pages/saved'));
+const ProfilePage = lazy(() => import('./components/pages/profile'));
+const AuthCard = lazy(() => import('@/components/pages/auth'));
+const About = lazy(() => import('@/components/pages/about'));
+
+
 function App() {
   const { user, isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
-
+  console.log(isAuthenticated);  
   return (
     <>
       <Routes>

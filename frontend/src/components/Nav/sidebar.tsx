@@ -10,13 +10,7 @@ import {
 import { useState } from "react"
 import { Logo } from "@/components/Nav/Logo"
 import { Button } from "../ui/button"
-import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-import {
-    DropdownMenuSeparator,
-  } from "@/components/ui/dropdown-menu"
-
 function Sidebar() {
     const navigate = useNavigate();
     const [selectedNavItem, setselectedNavItem] = useState('0');
@@ -24,7 +18,6 @@ function Sidebar() {
     function handleClick({index}) {
         setselectedNavItem(index);
         navigate(navLinks[index].path);
-
     }
 
     const navLinks = [
@@ -47,10 +40,6 @@ function Sidebar() {
             <SheetContent side="left">
                 <SheetHeader>
                     <SheetTitle><Logo /></SheetTitle>
-                    {/* <SheetDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                    </SheetDescription> */}
                 </SheetHeader>
                 <div className=" flex flex-col py-7 " >
 
