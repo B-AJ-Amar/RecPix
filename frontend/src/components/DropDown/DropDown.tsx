@@ -26,7 +26,7 @@ import {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className=" rounded-full w-10 h-10 p-0"><MoreHorizontal /></Button>
+          <Button variant="outline" aria-label="menu" className=" rounded-full w-10 h-10 p-0"><MoreHorizontal /></Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Username</DropdownMenuLabel>

@@ -30,6 +30,7 @@ export default function ImageField(props) {
           style={{ opacity: isHovered ? 1 : 0.5 }} 
           variant="outline" 
           onClick={clickHandler}
+          aria-label="like post"
         >
           <FontAwesomeIcon icon={faHeart} color={isLiked? "#E11D48":""}/>
         </Button>

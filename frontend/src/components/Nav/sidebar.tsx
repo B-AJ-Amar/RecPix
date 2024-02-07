@@ -32,17 +32,17 @@ function Sidebar() {
     return (
         <Sheet>
                 <span className=" flex flex-row">
-            <SheetTrigger>
+            <SheetTrigger aria-label="sideBar">
                 <Menu className="cursor-pointer"/>
             </SheetTrigger>
                 </span>
                 &nbsp;
                 <Logo className=" hidden md:block"/>
             <SheetContent side="left">
-                <SheetHeader>
+                <SheetHeader key={1}>
                     <SheetTitle><Logo /></SheetTitle>
                 </SheetHeader>
-                <div className=" flex flex-col py-7 " >
+                <div className=" flex flex-col py-7 " key={2} >
 
                     { navLinks.map((item, index) => (
                         <SheetClose asChild>
@@ -53,9 +53,9 @@ function Sidebar() {
 
                 </div>
                
-                    <SheetDescription className=" absolute bottom-5 flex justify-center ">
-                    © 2024, B A.J Amar. All Rights Reserved
-                    </SheetDescription>
+                <SheetDescription className=" absolute bottom-5 flex justify-center " key={3}>
+                © 2024, B A.J Amar. All Rights Reserved
+                </SheetDescription>
 
             
             </SheetContent>
