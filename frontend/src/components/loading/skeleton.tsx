@@ -9,3 +9,16 @@ export function SkeletonPost() {
   )
 }
 
+
+
+
+export function SkeletonHome (){
+  return(
+    <div className=" px-9  cloumns-1  min-[480px]:columns-2  md:columns-3  lg:columns-4">
+
+        {Array.from({ length: 10 }, (_, index) => (
+            <SkeletonPost key={index} />
+          ))}
+    </div>
+  )
+}
