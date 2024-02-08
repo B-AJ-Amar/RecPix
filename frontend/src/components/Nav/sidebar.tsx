@@ -14,9 +14,9 @@ import { Button } from "../ui/button"
 import { useNavigate } from 'react-router-dom';
 function Sidebar() {
     const navigate = useNavigate();
-    const [selectedNavItem, setselectedNavItem] = useState('0');
+    const [selectedNavItem, setselectedNavItem] = useState(0);
 
-    function handleClick({index}) {
+    function handleClick({index}: {index: number}) {
         setselectedNavItem(index);
         navigate(navLinks[index].path);
     }

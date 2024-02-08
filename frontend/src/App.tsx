@@ -22,7 +22,7 @@ const About = lazy(() => import('@/components/pages/about'));
 
 
 export default function App() {
-  const { user, isAuthenticated } = useAuth();
+  const {  isAuthenticated } = useAuth();
   return (
     <>
       <Routes>

@@ -7,8 +7,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {lazy , Suspense} from "react"
+import Loadinng from "../loading/loading"
 
-import Loading from "@/components/Loading/Loading"
 
 const AvaratarDDContent = lazy(() => import('@/components/DropDown/parts/AvatarDDContent'))
 
@@ -20,7 +20,7 @@ export function AvatarDropDown() {
         <Button className=" w-max p-0 rounded-full" variant="outline"><AvatarDemo /></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loadinng />}>
           <AvaratarDDContent />
         </Suspense>
         

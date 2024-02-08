@@ -1,7 +1,6 @@
 import React, { useState, useContext, createContext } from "react";
 
 import axios from "axios";
-import {toast} from "sonner"
 
 interface UserType{
     username: string
@@ -12,7 +11,26 @@ interface UserType{
 }
 
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext<{
+    user: UserType | null;
+    accessToken: String | null;
+    isAuthenticated: boolean;
+    login: (username: string, password: string) => Promise<
+      | String
+      | undefined
+    >;
+    logout: () => void;
+  }>({
+    user: null,
+    accessToken: null,
+    isAuthenticated: false,
+    login: async () => {
+      return Promise.resolve(undefined);
+    },
+    logout: () => {},
+  });
+
+  
 
 export function AuthProvider({ children }: { children: React.ReactNode}) {
     const [user, setUser] = useState<UserType | null>(() => {

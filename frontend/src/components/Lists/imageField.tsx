@@ -8,7 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "@/components/ui/button";
 
 // todo : background color on hover, add user profile on top left 
-export default function ImageField(props) {
+
+interface ImageFieldProps {
+  img: string;
+  id: string;
+}
+export default function ImageField(props: ImageFieldProps) {
     const [isLiked, setIsLiked] = React.useState(false);
     const [isHovered, setIsHovered] = React.useState(false);
     

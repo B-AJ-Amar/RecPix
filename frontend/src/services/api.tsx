@@ -33,8 +33,10 @@ const refreshToken = () => {
         const decoded = jwtDecode(token);
         let currentDate = new Date();
   
+        // honestly, i dont know how this works i did this because of typescript error 
+        // decoded?.exp && decoded.exp
         // JWT exp is in seconds
-        if (decoded.exp * 1000 < currentDate.getTime()) {
+        if (decoded?.exp && decoded.exp * 1000 < currentDate.getTime()) {
           console.log("Token expired.");
         } else {
           console.log("Valid token");

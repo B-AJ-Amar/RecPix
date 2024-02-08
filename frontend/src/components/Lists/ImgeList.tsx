@@ -12,7 +12,8 @@ interface ImageListProps {
   data: postType[];
 }
 
-function LazyImageFieldWrapper(props) {
+
+function LazyImageFieldWrapper(props: postType) {
   return (
     <Suspense fallback={<SkeletonPost />}>
       <ImageField {...props} />
