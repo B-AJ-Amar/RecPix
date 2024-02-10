@@ -1,0 +1,15 @@
+FROM node:21-alpine
+
+# Create app directory
+workdir app/frontend
+
+copy . .
+
+run npm install
+
+# TODO :
+# run npm run build
+
+expose 3001
+
+CMD ["npm", "run", "dev"]
