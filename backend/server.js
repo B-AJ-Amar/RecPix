@@ -6,6 +6,7 @@ const path         = require('path');
 
 const routes       = require('./routes');
 const {port}       = require('./config/settings');
+const cors = require('cors');
 // for offline development
 // const {ApolloServerPluginLandingPageGraphQLPlayground} = require("apollo-server-core");
 
@@ -49,6 +50,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 // app.use(express.urlencoded());
 app.use(cookieParser());
+
+app.use(cors());
 
 
 app.use((req, res, next) => {

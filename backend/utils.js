@@ -8,6 +8,8 @@ const settings = require('../config/settings');
 const middlewares = require('../middlewares');
 
 
+
+
 // ! the las thing that i find before sleep is this quary 
 /* 
 WITH [0, 1, 2, 3, 4, 5] AS Ids
