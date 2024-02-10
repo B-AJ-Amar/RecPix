@@ -1,7 +1,8 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
- 
+import fs from 'fs';
+
 import {VitePWA} from 'vite-plugin-pwa';
 
 
@@ -43,10 +44,10 @@ const manifestForPlugIn = {
   display:"standalone",
   scope:'/',
   start_url:"/",
-  orientation:'portrait'
+  orientation:'portrait',
+  prefer_related_applications:false
   }
 }
-
 export default defineConfig({
   plugins: [
     react(),
@@ -57,7 +58,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-})
+  // server: {
+  //   https: {
+  //     key: fs.readFileSync(path.resolve(__dirname, '../cert/192.168.43.80-key.pem')),
+  //     cert: fs.readFileSync(path.resolve(__dirname, '../cert/192.168.43.80.pem'))
+  //   }
+  // },
+});
 
 // export default {
 //   plugins: [
