@@ -1,7 +1,7 @@
 const { session, driver } = require('../../config/db'); 
 const { timezone,neoLikeRel,neoUserNode, neoPostNode } = require("../../config/settings"); 
 const {loginReqGql} = require('../../auth/auth');
-
+const gqlAuth = require('../../auth/gqlAuth');
 const {GraphQLError} = require('graphql/error');
 
 
@@ -9,7 +9,8 @@ const {GraphQLError} = require('graphql/error');
 
 // temporarelly i will use this function to get posts
 const getPosts = async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     const session = driver.session();
     // where not archived
     return await session.run(`
@@ -28,7 +29,8 @@ const getPosts = async (root, args, { req,res }) => {
 }
 
 const getArchivedPosts = async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     const session = driver.session();
     return await session.run(`
         MATCH (p:${neoPostNode}{ isActive:true, isArchived:true })
@@ -46,7 +48,8 @@ const getArchivedPosts = async (root, args, { req,res }) => {
 }
 
 const likePost = async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     let isCreated;
 
     const session = driver.session();
@@ -67,7 +70,8 @@ const likePost = async (root, args, { req,res }) => {
 
 
 const unlikePost = async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     let isCreated;
 
     const session = driver.session();

@@ -9,7 +9,7 @@ const {port}       = require('./config/settings');
 const cors = require('cors');
 // for offline development
 // const {ApolloServerPluginLandingPageGraphQLPlayground} = require("apollo-server-core");
-
+const gqlAuth = require('./auth/gqlAuth');
 //*config ============================================================================================================
 const {ApolloServer} = require("apollo-server-express")
 const {typeDefs}     = require("./graphql/schema")
@@ -19,6 +19,8 @@ const {resolvers}    = require("./graphql/resolvers")
 const server = new ApolloServer({ 
   typeDefs,
   resolvers ,
+  playground: false,
+  introspection: false,   
   context: ({ req, res,next }) => ({req,res,next}),
   formatError: (error) => {
     const { message, path } = error;
@@ -32,6 +34,7 @@ async function startServer() {
   await server.start();
   const app =  express();
 
+  app.use("/graphql", gqlAuth.isAuthenticated)
   server.applyMiddleware({ app,path:"/graphql" });
 
   app.listen(port, () => {

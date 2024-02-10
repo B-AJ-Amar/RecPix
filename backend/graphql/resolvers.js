@@ -17,7 +17,8 @@ const  {
   getArchivedPosts,
 } = require('./resolvers/post');
 
-// TODO : validate input
+// ! i changed the authentication to be in the middleware
+// ! am note sure if this is the best way to do it
 const resolvers = {
   Query: {
     hello: (root, args, { req,res }) => {
