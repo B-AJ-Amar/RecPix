@@ -40,7 +40,7 @@ const manifestForPlugIn = {
       }
     ],
   theme_color:'#171717',
-  background_color:'#f0e7db',
+  background_color:'#ffffff',
   display:"standalone",
   scope:'/',
   start_url:"/",
@@ -58,12 +58,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // server: {
-  //   https: {
-  //     key: fs.readFileSync(path.resolve(__dirname, '../cert/192.168.43.80-key.pem')),
-  //     cert: fs.readFileSync(path.resolve(__dirname, '../cert/192.168.43.80.pem'))
-  //   }
-  // },
+  server: {
+    port: 3001,
+    // https: {
+    //   key: fs.readFileSync(path.resolve(__dirname, '../cert/192.168.43.80-key.pem')),
+    //   cert: fs.readFileSync(path.resolve(__dirname, '../cert/192.168.43.80.pem'))
+    // }
+  },
 });
 
 // export default {

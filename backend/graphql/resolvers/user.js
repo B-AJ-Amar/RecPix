@@ -10,7 +10,8 @@ const {GraphQLError} = require('graphql/error');
 // ? Quaries
 // ? ==========================================================================
 const getUser = async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     let attrQuery = "";
     let connQuery = "";
     if (!args.username && !args.id) return new GraphQLError("invalid input");
@@ -35,7 +36,8 @@ const getUser = async (root, args, { req,res }) => {
 
 
 const getFollowers =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     const session = driver.session();
     return await session.run(`
     MATCH (u:${neoUserNode}{ isActive:true })-[f:${neoFollowRel}]->(p:${neoUserNode}{ isActive:true })
@@ -53,7 +55,8 @@ const getFollowers =  async (root, args, { req,res }) => {
 }
 
 const getFollowings =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     const session = driver.session();
     return await session.run(`
     MATCH (u:${neoUserNode}{ isActive:true })<-[f:${neoFollowRel}]-(p:${neoUserNode}{ isActive:true })
@@ -74,7 +77,8 @@ const getFollowings =  async (root, args, { req,res }) => {
 // const sujestUsers =  async (root, args, { req,res }) => {}
 
 const searchUsers =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     const session = driver.session();
     return await session.run(`
     MATCH (u:${neoUserNode}{ isActive:true })
@@ -97,7 +101,8 @@ const searchUsers =  async (root, args, { req,res }) => {
 // ? ==========================================================================
 
 const followUser =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
 
     const session = driver.session();
     return await session.run(`
@@ -120,7 +125,8 @@ const followUser =  async (root, args, { req,res }) => {
 
 
 const unfollowUser =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
 
     const session = driver.session();
     return await session.run(`
@@ -143,7 +149,8 @@ const unfollowUser =  async (root, args, { req,res }) => {
 
 
 const blockUser =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
     const session = driver.session();
     return await session.run(`
     MATCH (u:${neoUserNode} {isActive: true})-[b:${neoBlockRel}]->(p:${neoUserNode} {isActive: true})
@@ -179,7 +186,8 @@ const blockUser =  async (root, args, { req,res }) => {
 
 
 const unblockUser =  async (root, args, { req,res }) => {
-    loginReqGql(req,res);
+    // loginReqGql(req,res);
+    gqlAuth.gqlLoginRequired(req,res);
 
     const session = driver.session();
     return await session.run(`

@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "30001:3001"
+    depends_on:
+      - backend
+    # volumes:
+    #   - ./frontend:/app
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "30000:3000"
+    depends_on:
+      - db
+    # volumes:
+    #   - ./backend:/app
+  db:
+    image: neo4j:latest
+    container_name: neo4j_db
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=none
+    

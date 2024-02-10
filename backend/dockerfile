@@ -1,0 +1,15 @@
+FROM node:21-alpine
+
+# Create app directory
+WORKDIR /app/backend
+
+COPY . .
+
+RUN npm install
+
+# TODO :
+# run npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
